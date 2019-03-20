@@ -14,6 +14,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.BleSignal;
+import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onFound(Message message) {
                 System.out.print(message.getNamespace());
                 Log.i(TAG, "Found message: " + new String(message.getContent()));
+                Log.i(TAG, "Namespace : " + new String(message.getNamespace()));
+                Log.i(TAG, "Content : " + new String(message.getContent()));
+                Log.i(TAG, "Type : " + new String(message.getType()));
+                Log.i(TAG, "Timestamp : " + new String(String.valueOf(message.hashCode())));
             }
 
             @Override
@@ -58,13 +64,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 System.out.print(message.getNamespace());
                 Log.i(TAG, "Lost sight of message: " + new String(message.getContent()));
             }
+
+            /**
+             * Called when the Bluetooth Low Energy (BLE) signal associated with a message changes.
+             *
+             * This is currently only called for BLE beacon messages.
+             *
+             * For example, this is called when we see the first BLE advertisement
+             * frame associated with a message; or when we see subsequent frames with
+             * significantly different received signal strength indicator (RSSI)
+             * readings.
+             *
+             * For more information, see the MessageListener Javadocs.
+             */
+            @Override
+            public void onBleSignalChanged(Message message, BleSignal bleSignal) {
+                super.onBleSignalChanged(message, bleSignal);
+                Log.i(TAG, "Message " + new String(message.getContent()) + "  has new BLE signal information: " + bleSignal);
+            }
+
+            /**
+             * Called when Nearby's estimate of the distance to a message changes.
+             *
+             * This is currently only called for BLE beacon messages.
+             *
+             * For more information, see the MessageListener Javadocs.
+             */
+            @Override
+            public void onDistanceChanged(final Message message, final Distance distance) {
+                Log.i(TAG, "Message " + new String(message.getContent()) + " Distance changed, new distance: " + distance);
+            }
         };
 
         mMessage = new Message("Hello World".getBytes());
     }
     private void subscribe() {
         SubscribeOptions options = new SubscribeOptions.Builder()
-                .setStrategy(Strategy.BLE_ONLY)
+                .setStrategy(Strategy.DEFAULT)
                 // Note: If no filter is specified, Nearby will return all of your
                 // attachments regardless of type. You must use a filter to specify
                 // a particular set of attachments (by type) or to fetch attachments
