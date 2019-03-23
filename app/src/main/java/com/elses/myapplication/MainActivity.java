@@ -2,15 +2,15 @@ package com.elses.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.ResultCallback;
+
+import com.elses.service.MetricsService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
@@ -19,11 +19,12 @@ import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
-import com.google.android.gms.nearby.messages.NearbyMessagesStatusCodes;
 import com.google.android.gms.nearby.messages.NearbyPermissions;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
@@ -33,10 +34,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private MessageListener mMessageListener;
     private Message mMessage;
     private OnFailureListener onFailureListener;
+    private DatabaseReference myRef;
+    MetricsService metricsService ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myRef = FirebaseDatabase.getInstance().getReference();
+
         if (!havePermissions()) {
             Log.i(TAG, "Requesting permissions needed for this app.");
             requestPermissions();
@@ -80,7 +85,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onBleSignalChanged(Message message, BleSignal bleSignal) {
                 super.onBleSignalChanged(message, bleSignal);
-                Log.i(TAG, "Message " + new String(message.getContent()) + "  has new BLE signal information: " + bleSignal);
+
+                metricsService = new MetricsService();
+                metricsService.pushMetrics(myRef,message,bleSignal);
+
             }
 
             /**
@@ -90,10 +98,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
              *
              * For more information, see the MessageListener Javadocs.
              */
-            @Override
+          /*  @Override
             public void onDistanceChanged(final Message message, final Distance distance) {
                 Log.i(TAG, "Message " + new String(message.getContent()) + " Distance changed, new distance: " + distance);
-            }
+            }*/
         };
 
         mMessage = new Message("Hello World".getBytes());

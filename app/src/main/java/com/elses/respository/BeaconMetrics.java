@@ -1,6 +1,22 @@
 package com.elses.respository;
 
-import io.realm.RealmObject;
+public class BeaconMetrics{
+    public int rssi;
+    public Long timestamp;
+    public String name;
+    public int txPower;
+    public int distance;
 
-public class BeaconMetrics extends RealmObject {
+    public BeaconMetrics(){
+
+    }
+
+    public BeaconMetrics(String name, int rssi,int txPower,int distance){
+        this.rssi=rssi;
+        this.txPower=txPower;
+        this.distance=distance;
+        this.name=name;
+        this.timestamp=System.currentTimeMillis();
+    }
+
 }
