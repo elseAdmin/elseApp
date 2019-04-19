@@ -1,6 +1,7 @@
 package com.elses.myapplication;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,13 +10,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import java.util.Date;
+import android.widget.Toast;
 
 import com.elses.service.MetricsService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.BleSignal;
-import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
@@ -36,11 +41,54 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private OnFailureListener onFailureListener;
     private DatabaseReference myRef;
     MetricsService metricsService ;
+    Button startRecording,stopRecording;
+    EditText distance1,distance2,distance3,distance4,testCase;
+    Date startedAt,stoppedAt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myRef = FirebaseDatabase.getInstance().getReference();
+
+        startRecording = (Button)findViewById(R.id.start);
+        stopRecording = (Button)findViewById(R.id.stop);
+        distance1 = (EditText)findViewById(R.id.distance1);
+        distance2 = (EditText)findViewById(R.id.distance2);
+        distance3 = (EditText)findViewById(R.id.distance3);
+        distance4 = (EditText)findViewById(R.id.distance4);
+        testCase = (EditText)findViewById(R.id.testCase);
+
+        startRecording.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, "Started recording beacon metrics.", Toast.LENGTH_LONG);
+                Constants.recording=true;
+                startedAt = new Date();
+                try {
+                    Constants.distance1 = new Double(distance1.getText().toString());
+                    Constants.distance2 = new Double(distance2.getText().toString());
+                    Constants.distance3 = new Double(distance3.getText().toString());
+                    Constants.distance4 = new Double(distance4.getText().toString());
+                    Constants.testCase = testCase.getText().toString();
+                }catch(NumberFormatException e){
+                    toast = Toast.makeText(context, "Input valid numbers.", Toast.LENGTH_LONG);
+                }finally {
+                    Log.i(TAG, Double.toString(Constants.distance1));
+                    toast.show();
+                }
+            }
+        });
+
+        stopRecording.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, "Recording stopped.", Toast.LENGTH_LONG);
+                Constants.recording=false;
+                stoppedAt=new Date();
+                metricsService.pushMetaData(myRef,startedAt,stoppedAt);
+                toast.show();
+            }
+        });
 
         if (!havePermissions()) {
             Log.i(TAG, "Requesting permissions needed for this app.");
@@ -56,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
-                System.out.print(message.getNamespace());
+                Log.i("nameSpace : ",message.getNamespace());
                 Log.i(TAG, "Found message: " + new String(message.getContent()));
                 Log.i(TAG, "Namespace : " + new String(message.getNamespace()));
                 Log.i(TAG, "Content : " + new String(message.getContent()));

@@ -6,13 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="start recording"
+        android:layout_marginTop="130dp"/>
 
+    <EditText
+        android:id="@+id/testCase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="enter test case name"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/start"/>
+
+    <EditText
+        android:id="@+id/distance1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="distance of Beacon 1"
+        android:inputType="number"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/testCase"/>
+
+    <EditText
+        android:id="@+id/distance2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="distance of Beacon 2"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/distance1"/>
+
+    <EditText
+        android:id="@+id/distance3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="distance of Beacon 3"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/distance2"/>
+
+    <EditText
+        android:id="@+id/distance4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="distance of Beacon 4"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/distance3"/>
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stop recording"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/distance4"/>
 </android.support.constraint.ConstraintLayout>
