@@ -13,9 +13,10 @@ import java.util.Date;
 
 public class MetricsService {
     BeaconMetrics metrics;
-    public void pushMetrics(DatabaseReference ref, Message message, BleSignal bleSignal){
+    public void pushMetrics(DatabaseReference ref, Message message, BleSignal bleSignal,Date stopAt){
+        Date now = new Date();
         Log.i("else", "Message " + new String(message.getContent()) + "  has new BLE signal information: " + bleSignal);
-    if(Constants.recording) {
+    if(Constants.recording && (now.before(stopAt))) {
         switch (new String(message.getContent())) {
             case "Beacon 1":
                 metrics = new BeaconMetrics(new String(message.getContent()), bleSignal.getRssi(), bleSignal.getTxPower(), Constants.distance1);
