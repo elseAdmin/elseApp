@@ -38,11 +38,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int PERMISSIONS_REQUEST_CODE = 1111;
     private MessageListener mMessageListener;
     private Message mMessage;
+    private int stopInMins;
     private OnFailureListener onFailureListener;
     private DatabaseReference myRef;
     MetricsService metricsService ;
     Button startRecording,stopRecording;
-    EditText distance1,distance2,distance3,distance4,testCase;
+    EditText distance1,distance2,distance3,distance4,testCase,stopInMinsButton;
     Date startedAt,stoppedAt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         startRecording = (Button)findViewById(R.id.start);
         stopRecording = (Button)findViewById(R.id.stop);
+        stopInMinsButton = (EditText)findViewById(R.id.stopInMin);
         distance1 = (EditText)findViewById(R.id.distance1);
         distance2 = (EditText)findViewById(R.id.distance2);
         distance3 = (EditText)findViewById(R.id.distance3);
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Constants.recording=true;
                 startedAt = new Date();
                 try {
+                    stopInMins = new Integer(stopInMinsButton.getText().toString());
                     Constants.distance1 = new Double(distance1.getText().toString());
                     Constants.distance2 = new Double(distance2.getText().toString());
                     Constants.distance3 = new Double(distance3.getText().toString());
@@ -73,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }catch(NumberFormatException e){
                     toast = Toast.makeText(context, "Input valid numbers.", Toast.LENGTH_LONG);
                 }finally {
-                    Log.i(TAG, Double.toString(Constants.distance1));
+                    startedAt.setMinutes(startedAt.getMinutes()+stopInMins);
+                    stoppedAt=startedAt;
                     toast.show();
                 }
             }
@@ -135,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 super.onBleSignalChanged(message, bleSignal);
 
                 metricsService = new MetricsService();
-                metricsService.pushMetrics(myRef,message,bleSignal);
+                metricsService.pushMetrics(myRef,message,bleSignal,stoppedAt);
 
             }
 
