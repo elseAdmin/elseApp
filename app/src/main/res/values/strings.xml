@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">ELSE</string>
+    <string name="logo_desc">This is our company logo</string>
+    <string name="title_activity_navigation_screen">NavigationScreen</string>
+    <string name="title_home">Home</string>
+    <string name="title_parking">Parking</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
