@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.elses.service.ParkService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
@@ -23,6 +24,12 @@ import com.google.android.gms.nearby.messages.NearbyPermissions;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -36,10 +43,17 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
     private static final String BeaconTag = "Beacon";
     private static final String GenericcTag = "ElseApp";
     private static final int PERMISSIONS_REQUEST_CODE = 1111;
+    DatabaseHelper db;
+    ParkService parkService;
+    private DatabaseReference proxi1,proxi2,root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_screen);
+        root = FirebaseDatabase.getInstance().getReference();
+        proxi1 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot1");
+        proxi2 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot2");
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -52,7 +66,10 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
 
         String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.i(GenericcTag,"User identified by android id :"+androidId);
-        
+
+        db = new DatabaseHelper(this);
+        parkService = new ParkService(db);
+
         onFailureListener = new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -73,16 +90,50 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
 
             @Override
             public void onLost(Message message) {
-                System.out.print(message.getNamespace());
                 Log.i(BeaconTag, "Lost sight of Beacon: " +new String(message.getContent()));
             }
 
             @Override
             public void onBleSignalChanged(Message message, BleSignal bleSignal) {
                 super.onBleSignalChanged(message, bleSignal);
+                db.recordReading(new String(message.getContent()), bleSignal.getRssi());
                 Log.i(BeaconTag, "Signal fluctuation for Beacon: "+new String(message.getContent())+ " ,new RSSI: "+bleSignal.getRssi());
             }
         };
+
+        ValueEventListener postListenerProxi1 = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                parkService.setSlot1Proxi(dataSnapshot.getValue(Integer.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(GenericcTag, "Value change listener failed for slot 1, ", databaseError.toException());
+            }
+        };
+        proxi1.addValueEventListener(postListenerProxi1);
+
+
+        ValueEventListener postListenerProxi2 = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                parkService.setSlot2Proxi(dataSnapshot.getValue(Integer.class));
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(GenericcTag, "Value change listener failed for slot 2, ", databaseError.toException());
+                // ...
+            }
+        };
+        proxi2.addValueEventListener(postListenerProxi2);
+
 
         if (!havePermissions()) {
             Log.i(GenericcTag, "Requesting permissions needed for this app.");

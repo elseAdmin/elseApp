@@ -13,22 +13,37 @@ import android.arch.lifecycle.ViewModelProviders;
 
 import com.elses.myapplication.R;
 
-public class DashboardFragment extends Fragment {
+import java.util.HashMap;
+import java.util.Map;
 
-    private DashboardViewModel dashboardViewModel;
+public class ParkingFragment extends Fragment {
+
+    private ParkingViewModel parkingViewModel;
+
+    Map<String,String> proxiBeacon ;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
+        parkingViewModel =
+                ViewModelProviders.of(this).get(ParkingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_parking, container, false);
         final TextView textView = root.findViewById(R.id.text_parking);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
+        parkingViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
         });
+
+        populateSensorBeaconMapping();
         return root;
+    }
+
+    private void populateSensorBeaconMapping(){
+        if(proxiBeacon==null){
+        proxiBeacon = new HashMap<>();
+        proxiBeacon.put("CarSlot1","Beacon 1");
+        proxiBeacon.put("CarSlot2","Beacon 2");
+        }
     }
 }
