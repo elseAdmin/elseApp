@@ -3,6 +3,7 @@ package com.elses.myapplication;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -49,7 +50,9 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-
+        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.i(GenericcTag,"User identified by android id :"+androidId);
+        
         onFailureListener = new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -71,13 +74,13 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
             @Override
             public void onLost(Message message) {
                 System.out.print(message.getNamespace());
-                Log.i(BeaconTag, "Lost sight of Beacon: " + message.getContent());
+                Log.i(BeaconTag, "Lost sight of Beacon: " +new String(message.getContent()));
             }
 
             @Override
             public void onBleSignalChanged(Message message, BleSignal bleSignal) {
                 super.onBleSignalChanged(message, bleSignal);
-                Log.i(BeaconTag, "Signal fluctuation for Beacon: "+message.getContent()+ " new RSSI: "+bleSignal.getRssi());
+                Log.i(BeaconTag, "Signal fluctuation for Beacon: "+new String(message.getContent())+ " ,new RSSI: "+bleSignal.getRssi());
             }
         };
 
@@ -135,8 +138,8 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
             }
         }
         private boolean havePermissions () {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED;
+         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED ;
         }
 
         private void requestPermissions () {
