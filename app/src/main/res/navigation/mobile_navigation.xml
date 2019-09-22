@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_parking"
+        android:id="@+id/scanner_fragment"
         android:name="com.elses.myapplication.ui.dashboard.DashboardFragment"
         android:label="@string/title_parking"
         tools:layout="@layout/fragment_parking" />
