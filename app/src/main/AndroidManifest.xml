@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.elses.myapplication">
-    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -11,9 +10,10 @@
         android:roundIcon="@mipmap/ic_else_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SlotBooking"></activity>
         <activity
             android:name=".NavigationScreen"
-            android:label="@string/title_activity_navigation_screen"></activity>
+            android:label="@string/title_activity_navigation_screen" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".SplashScreen"
@@ -29,8 +29,9 @@
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCUs29xP8tY5rsT4kjMmr7nvZfJDLa-pOw" />
     </application>
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <dist:module dist:instant="true" />
 

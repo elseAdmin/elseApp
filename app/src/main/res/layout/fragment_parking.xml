@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
+    <!--<fragment
         android:id="@+id/scanner_fragment"
-        android:name="com.elses.myapplication.ui.dashboard.DashboardFragment"
+        android:name="com.elses.myapplication.ui.dashboard.ParkingFragment"
         android:label="@string/title_parking"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"/>-->
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

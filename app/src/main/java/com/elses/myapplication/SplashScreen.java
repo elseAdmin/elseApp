@@ -18,7 +18,7 @@ public class SplashScreen extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreen.this, NavigationScreen.class);
+                Intent intent = new Intent(SplashScreen.this, SlotBooking.class);
                 startActivity(intent);
                 finish();
             }

@@ -7,4 +7,6 @@
     <color name="colorNavIcon">#dae9f6</color>
     <color name="colorNavText">#01294b</color>
     <color name="actionbar_opacity">#33000000</color>
+    <color name="colorgreen">#00cc00</color>
+    <color name="colorred">#ff0000</color>
 </resources>
