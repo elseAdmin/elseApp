@@ -1,7 +1,14 @@
 package com.elses.myapplication;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,17 +16,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.elses.myapplication.ui.BeaconConnectivityActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.BleSignal;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.gms.nearby.messages.MessagesOptions;
+import com.google.android.gms.nearby.messages.NearbyPermissions;
+import com.google.android.gms.nearby.messages.Strategy;
+import com.google.android.gms.nearby.messages.SubscribeOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class SlotBooking extends AppCompatActivity {
-
+public class SlotBooking extends BeaconConnectivityActivity{
     private EditText slot1,slot2;
     private DatabaseReference proxi1,proxi2;
-    private static final String GenericTag = "ElseApp";
+    private static final String GenericTag = "Slot Booking";
     DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +45,7 @@ public class SlotBooking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slot_booking);
         db = new DatabaseHelper();
-
+        final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         slot1 = findViewById(R.id.slot1);
         slot2 = findViewById(R.id.slot2);
 
@@ -92,4 +110,8 @@ public class SlotBooking extends AppCompatActivity {
         };
         proxi2.addValueEventListener(postListenerProxi2);
     }
+
+
+
+
 }

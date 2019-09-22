@@ -1,4 +1,5 @@
 package com.elses.myapplication.ui.dashboard;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.elses.myapplication.SlotBooking;
+import com.elses.myapplication.SplashScreen;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -25,21 +28,19 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(getActivity(), "Contents = " + rawResult.getText() +
-                ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "looking for available slots", Toast.LENGTH_SHORT).show();
         Log.i("Barcode", rawResult.getText());
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               mScannerView.resumeCameraPreview(ParkingFragment.this);
+                Intent intent = new Intent(getActivity(), SlotBooking.class);
             }
-        }, 2000);
+        }, 20);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("Inside Parking dashboard");
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(!checkPermission()){
