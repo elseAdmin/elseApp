@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.elses.service.ParkService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
@@ -24,11 +23,8 @@ import com.google.android.gms.nearby.messages.NearbyPermissions;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -41,19 +37,14 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
     private OnFailureListener onFailureListener;
     private GoogleApiClient mGoogleApiClient;
     private static final String BeaconTag = "Beacon";
-    private static final String GenericcTag = "ElseApp";
+    private static final String GenericTag = "ElseApp";
     private static final int PERMISSIONS_REQUEST_CODE = 1111;
     DatabaseHelper db;
-    ParkService parkService;
-    private DatabaseReference proxi1,proxi2,root;
-
+    private DatabaseReference beaconRoot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_screen);
-        root = FirebaseDatabase.getInstance().getReference();
-        proxi1 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot1");
-        proxi2 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot2");
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -64,12 +55,11 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.i(GenericcTag,"User identified by android id :"+androidId);
+        final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.i(GenericTag,"User identified by android id :"+androidId);
 
-        db = new DatabaseHelper(this);
-        parkService = new ParkService(db);
-
+        db = new DatabaseHelper();
+        beaconRoot = FirebaseDatabase.getInstance().getReference().child("beacons");
         onFailureListener = new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -80,70 +70,35 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
-                Log.i("nameSpace : ", message.getNamespace());
-                Log.i(BeaconTag, "Found message: " + new String(message.getContent()));
-                Log.i(BeaconTag, "Namespace : " + message.getNamespace());
-                Log.i(BeaconTag, "Content : " + new String(message.getContent()));
-                Log.i(BeaconTag, "Type : " + message.getType());
-                Log.i(BeaconTag, "Timestamp : " + message.hashCode());
+                Log.i(BeaconTag, "Discovered beacon with name: " + new String(message.getContent()));
+                db.addBeacon(new String(message.getContent()));
             }
 
             @Override
             public void onLost(Message message) {
-                Log.i(BeaconTag, "Lost sight of Beacon: " +new String(message.getContent()));
+                db.removeBeacon(new String(message.getContent()));
+                Log.i(BeaconTag, "User id: "+androidId+" is now invisible to Beacon: " +new String(message.getContent()));
             }
 
             @Override
             public void onBleSignalChanged(Message message, BleSignal bleSignal) {
                 super.onBleSignalChanged(message, bleSignal);
-                db.recordReading(new String(message.getContent()), bleSignal.getRssi());
+                //beaconRoot.child(new String(message.getContent())).push(androidId);
+                db.addBeacon(new String(message.getContent()));
                 Log.i(BeaconTag, "Signal fluctuation for Beacon: "+new String(message.getContent())+ " ,new RSSI: "+bleSignal.getRssi());
             }
         };
 
-        ValueEventListener postListenerProxi1 = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                parkService.setSlot1Proxi(dataSnapshot.getValue(Integer.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(GenericcTag, "Value change listener failed for slot 1, ", databaseError.toException());
-            }
-        };
-        proxi1.addValueEventListener(postListenerProxi1);
-
-
-        ValueEventListener postListenerProxi2 = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                parkService.setSlot2Proxi(dataSnapshot.getValue(Integer.class));
-                // ...
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(GenericcTag, "Value change listener failed for slot 2, ", databaseError.toException());
-                // ...
-            }
-        };
-        proxi2.addValueEventListener(postListenerProxi2);
-
 
         if (!havePermissions()) {
-            Log.i(GenericcTag, "Requesting permissions needed for this app.");
+            Log.i(GenericTag, "Requesting permissions needed for this app.");
             requestPermissions();
         }
     }
 
         @Override
         public void onConnected (@Nullable Bundle bundle){
-            Log.i(GenericcTag, "GoogleApiClient connected");
+            Log.i(GenericTag, "GoogleApiClient connected");
             subscribe();
         }
 
@@ -153,23 +108,23 @@ public class NavigationScreen extends AppCompatActivity implements GoogleApiClie
             if (havePermissions()) {
                 buildGoogleApiClient();
             }
-            Log.i(GenericcTag,"GoogleApiClient services resumed");
+            Log.i(GenericTag,"GoogleApiClient services resumed");
         }
 
         @Override
         protected void onPause () {
             super.onPause();
-            Log.i(GenericcTag,"GoogleApiClient services paused");
+            Log.i(GenericTag,"GoogleApiClient services paused");
         }
 
         @Override
         public void onConnectionFailed (@NonNull ConnectionResult connectionResult){
-            Log.e(GenericcTag,"Connection failed : GoogleApiClient with error message : "+connectionResult.getErrorMessage());
+            Log.e(GenericTag,"Connection failed : GoogleApiClient with error message : "+connectionResult.getErrorMessage());
         }
 
         @Override
         public void onConnectionSuspended ( int i){
-            Log.w(GenericcTag, "Connection suspended : GoogleApiClient with Error code: " + i);
+            Log.w(GenericTag, "Connection suspended : GoogleApiClient with Error code: " + i);
         }
         private void subscribe () {
             SubscribeOptions options = new SubscribeOptions.Builder()

@@ -58,7 +58,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/edittext"
+            android:id="@+id/slot1"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
@@ -66,27 +66,11 @@
             android:padding="10dp"
             android:background="@drawable/ic_parking_car_green"/>
         <EditText
+            android:id="@+id/slot2"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:background="@drawable/ic_parking_car_green"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/parkedbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Parked"/>
-        <Button
-            android:id="@+id/vacantbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vacant"/>
-
     </LinearLayout>
 </LinearLayout>
