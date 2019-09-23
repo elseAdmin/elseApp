@@ -21,6 +21,7 @@
                 android:layout_height="24dp"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
+                android:inputType="none"
                 android:background="@drawable/ic_parking_car_red"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -40,6 +41,7 @@
                 android:layout_height="24dp"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
+                android:inputType="none"
                 android:background="@drawable/ic_parking_car_green"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -63,6 +65,7 @@
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
+            android:inputType="none"
             android:padding="10dp"
             android:background="@drawable/ic_parking_car_green"/>
         <EditText
@@ -70,6 +73,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
+            android:inputType="none"
             android:padding="10dp"
             android:background="@drawable/ic_parking_car_green"/>
     </LinearLayout>

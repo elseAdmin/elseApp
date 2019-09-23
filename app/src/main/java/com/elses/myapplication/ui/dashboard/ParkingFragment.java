@@ -35,8 +35,9 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
             @Override
             public void run() {
                 Intent intent = new Intent(getActivity(), SlotBooking.class);
+                startActivity(intent);
             }
-        }, 20);
+        }, 10);
     }
 
     @Override

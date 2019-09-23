@@ -43,6 +43,7 @@ public class SlotBooking extends BeaconConnectivityActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        Log.i("Inside Slot layout","Car SLots available");
         setContentView(R.layout.activity_slot_booking);
         db = new DatabaseHelper();
         final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
