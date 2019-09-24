@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,9 @@ public class NewSlotBooking extends Fragment {
 
         ValueEventListener postListenerProxi1 = new ValueEventListener() {
             int temp = -1;
+            Bundle bundle=new Bundle();
+            Fragment resultFragment = new ResultFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
@@ -58,10 +62,18 @@ public class NewSlotBooking extends Fragment {
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
                         gradient1.setColor(Color.GRAY);
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
+                        bundle.putString("message", "Thanks for parking here!");
+                        resultFragment.setArguments(bundle);
+                        transaction.replace(R.id.nav_host_fragment, resultFragment);
+                        transaction.commit();
                     }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 1")){
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
                         gradient1.setColor(Color.RED);
                         Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
+                        bundle.putString("message", "You have parked at Slot 1");
+                        resultFragment.setArguments(bundle);
+                        transaction.replace(R.id.nav_host_fragment, resultFragment);
+                        transaction.commit();
                     }
                 }
             }
@@ -77,6 +89,9 @@ public class NewSlotBooking extends Fragment {
 
         ValueEventListener postListenerProxi2 = new ValueEventListener() {
             int temp = -1;
+            Bundle bundle=new Bundle();
+            Fragment resultFragment = new ResultFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
@@ -87,10 +102,18 @@ public class NewSlotBooking extends Fragment {
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         gradient1.setColor(Color.GRAY);
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
+                        bundle.putString("message", "Thanks for parking here!");
+                        resultFragment.setArguments(bundle);
+                        transaction.replace(R.id.nav_host_fragment, resultFragment);
+                        transaction.commit();
                     }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 2")){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         gradient1.setColor(Color.RED);
                         Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
+                        bundle.putString("message", "You have parked at Slot 2");
+                        resultFragment.setArguments(bundle);
+                        transaction.replace(R.id.nav_host_fragment, resultFragment);
+                        transaction.commit();
                     }
                 }
             }

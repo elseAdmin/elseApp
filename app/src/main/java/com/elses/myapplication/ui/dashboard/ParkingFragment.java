@@ -39,7 +39,8 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
             @Override
             public void run() {
                 /*Intent intent = new Intent(getActivity(), SlotBooking.class);
-                startActivity(intent);*/
+                startActivity(intent);
+                getActivity().finish();*/
                 System.out.println("Calling result fragment");
                 Fragment slotFragment = new NewSlotBooking();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

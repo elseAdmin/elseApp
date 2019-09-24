@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -51,6 +51,6 @@ public class HomeFragment extends Fragment {
                 transaction.replace(R.id.nav_host_fragment, resultFragment);
                 transaction.commit();
             }
-        },3000);
+        },3000);*/
     }
 }

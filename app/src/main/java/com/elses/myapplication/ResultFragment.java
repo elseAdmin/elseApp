@@ -14,7 +14,7 @@ import com.elses.myapplication.ui.home.HomeViewModel;
 
 public class ResultFragment extends Fragment {
 
-    private String res = "Your Car is Parked at M121";
+    //private String res = "Your Car is Parked at M121";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,9 +22,10 @@ public class ResultFragment extends Fragment {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_result, container, false);
         System.out.println("Inside Result dashboard");
+        String strText=getArguments().getString("message");
         View root = inflater.inflate(R.layout.fragment_result, container, false);
         final TextView textView = root.findViewById(R.id.text_result);
-        textView.setText(res);
+        textView.setText(strText);
         return root;
     }
 }
