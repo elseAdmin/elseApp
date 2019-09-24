@@ -19,9 +19,10 @@ import java.util.Set;
 
 public class DatabaseHelper {
     public DatabaseHelper() {
+        if(beacons==null)
         beacons = new HashSet<>();
     }
-    Set<String> beacons;
+    private static Set<String> beacons;
 
     public void addBeacon (String name) {
        beacons.add(name);

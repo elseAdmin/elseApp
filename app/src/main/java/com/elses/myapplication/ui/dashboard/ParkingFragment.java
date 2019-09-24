@@ -47,7 +47,7 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
                 transaction.replace(R.id.nav_host_fragment, slotFragment);
                 transaction.commit();
             }
-        }, 1000);
+        }, 100);
     }
 
     @Override
