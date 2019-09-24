@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.elses.myapplication.NewSlotBooking;
+import com.elses.myapplication.R;
+import com.elses.myapplication.ResultFragment;
 import com.elses.myapplication.SlotBooking;
 import com.elses.myapplication.SplashScreen;
 import com.google.zxing.Result;
@@ -34,10 +38,15 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getActivity(), SlotBooking.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(getActivity(), SlotBooking.class);
+                startActivity(intent);*/
+                System.out.println("Calling result fragment");
+                Fragment slotFragment = new NewSlotBooking();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment, slotFragment);
+                transaction.commit();
             }
-        }, 10);
+        }, 1000);
     }
 
     @Override
