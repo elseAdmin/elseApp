@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 
+import com.elses.myapplication.DatabaseHelper;
 import com.elses.myapplication.R;
 import com.elses.myapplication.ResultFragment;
 import com.elses.myapplication.SlotBooking;
@@ -22,21 +23,47 @@ import com.elses.myapplication.SlotBooking;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    DatabaseHelper dbHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         System.out.println("Inside Home dashboard");
+        dbHelper = new DatabaseHelper();
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        if(dbHelper.isBeaconDetected("Beacon 4")){
+            textView.setText("Welcome to unity Rohini!!!");
+        }
+        else {
+            homeViewModel.getText().observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(@Nullable String s) {
+                    textView.setText(s);
+                }
+            });
+        }
+        refreshScreen();
         return root;
+    }
+
+    private void refreshScreen(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Refreshing fragment");
+                Fragment fragment = getFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                if(fragment instanceof HomeFragment){
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.detach(fragment);
+                    transaction.attach(fragment);
+                    transaction.commit();
+                }
+
+            }
+        },10000);
     }
 
     @Override
@@ -45,12 +72,16 @@ public class HomeFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Calling result fragment");
-                Fragment resultFragment = new ResultFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, resultFragment);
-                transaction.commit();
+                System.out.println("Refreshing fragment");
+                Fragment fragment = getFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                if(fragment instanceof HomeFragment){
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.detach(fragment);
+                    transaction.attach(fragment);
+                    transaction.commit();
+                }
+
             }
-        },3000);*/
+        },10000);*/
     }
 }
