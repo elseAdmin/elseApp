@@ -48,18 +48,16 @@ public class NewSlotBooking extends Fragment {
         proxi2 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot2");
 
         ValueEventListener postListenerProxi1 = new ValueEventListener() {
-            int temp = -1;
             Bundle bundle=new Bundle();
             Fragment resultFragment = new ResultFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                if(temp==-1){
-                    temp = dataSnapshot.getValue(Integer.class);
-                }else {
+
                     if(dataSnapshot.getValue(Integer.class)==0 && db.isBeaconDetected("Beacon 1")){
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
+                        db.setCurrentSlot(null);
                         gradient1.setColor(Color.GRAY);
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
                         bundle.putString("message", "Thanks for parking here!");
@@ -68,6 +66,7 @@ public class NewSlotBooking extends Fragment {
                         transaction.commit();
                     }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 1")){
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
+                        db.setCurrentSlot("Slot 1");
                         gradient1.setColor(Color.RED);
                         Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
                         bundle.putString("message", "You have parked at Slot 1");
@@ -75,7 +74,6 @@ public class NewSlotBooking extends Fragment {
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
                         transaction.commit();
                     }
-                }
             }
 
             @Override
@@ -88,41 +86,38 @@ public class NewSlotBooking extends Fragment {
 
 
         ValueEventListener postListenerProxi2 = new ValueEventListener() {
-            int temp = -1;
             Bundle bundle=new Bundle();
             Fragment resultFragment = new ResultFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                if(temp==-1){
-                    temp = dataSnapshot.getValue(Integer.class);
-                }else {
+
                     if(dataSnapshot.getValue(Integer.class)==0 && db.isBeaconDetected("Beacon 2")){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
+                        db.setCurrentSlot(null);
                         gradient1.setColor(Color.GRAY);
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
                         bundle.putString("message", "Thanks for parking here!");
                         resultFragment.setArguments(bundle);
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
                         transaction.commit();
-                    }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 2")){
+                    }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 2")) {
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         gradient1.setColor(Color.RED);
+                        db.setCurrentSlot("Slot 2");
                         Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
                         bundle.putString("message", "You have parked at Slot 2");
                         resultFragment.setArguments(bundle);
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
                         transaction.commit();
                     }
-                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
                 Log.w(GenericTag, "Value change listener failed for slot 2, ", databaseError.toException());
-                // ...
             }
         };
         proxi2.addValueEventListener(postListenerProxi2);

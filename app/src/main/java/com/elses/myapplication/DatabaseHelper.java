@@ -23,6 +23,15 @@ public class DatabaseHelper {
         beacons = new HashSet<>();
     }
     private static Set<String> beacons;
+    private static String currentSlot;
+
+    public String getCurrentSlot() {
+        return currentSlot;
+    }
+
+    public void setCurrentSlot(String currentSlot) {
+        DatabaseHelper.currentSlot = currentSlot;
+    }
 
     public void addBeacon (String name) {
        beacons.add(name);
