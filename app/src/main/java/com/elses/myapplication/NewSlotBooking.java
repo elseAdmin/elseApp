@@ -44,8 +44,8 @@ public class NewSlotBooking extends Fragment {
         slot1 = root.findViewById(R.id.slot1);
         slot2 = root.findViewById(R.id.slot2);
 
-        proxi1 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot1");
-        proxi2 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot2");
+        proxi1 = FirebaseDatabase.getInstance().getReference().child("CarSlot1");
+        proxi2 = FirebaseDatabase.getInstance().getReference().child("CarSlot2");
 
         ValueEventListener postListenerProxi1 = new ValueEventListener() {
             Bundle bundle=new Bundle();
@@ -59,20 +59,20 @@ public class NewSlotBooking extends Fragment {
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
                         db.setCurrentSlot(null);
                         gradient1.setColor(Color.GRAY);
-                        Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
-                        bundle.putString("message", "Thanks for parking here!");
+                        Toast.makeText(getActivity(), "Thanks for parking at Slot 1", Toast.LENGTH_SHORT).show();
+                      /*  bundle.putString("message", "Thanks for parking here!");
                         resultFragment.setArguments(bundle);
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();
+                        transaction.commit();*/
                     }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 1")){
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
                         db.setCurrentSlot("Slot 1");
                         gradient1.setColor(Color.RED);
                         Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
-                        bundle.putString("message", "You have parked at Slot 1");
+                        /*bundle.putString("message", "You have parked at Slot 1");
                         resultFragment.setArguments(bundle);
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();
+                        transaction.commit();*/
                     }
             }
 
@@ -97,20 +97,20 @@ public class NewSlotBooking extends Fragment {
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         db.setCurrentSlot(null);
                         gradient1.setColor(Color.GRAY);
-                        Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
-                        bundle.putString("message", "Thanks for parking here!");
+                        Toast.makeText(getActivity(), "Thanks for parking at Slot 2!", Toast.LENGTH_SHORT).show();
+                     /*   bundle.putString("message", "Thanks for parking here!");
                         resultFragment.setArguments(bundle);
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();
+                        transaction.commit();*/
                     }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 2")) {
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         gradient1.setColor(Color.RED);
                         db.setCurrentSlot("Slot 2");
                         Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
-                        bundle.putString("message", "You have parked at Slot 2");
+                     /*   bundle.putString("message", "You have parked at Slot 2");
                         resultFragment.setArguments(bundle);
                         transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();
+                        transaction.commit();*/
                     }
             }
 
