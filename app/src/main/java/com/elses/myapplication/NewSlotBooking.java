@@ -56,28 +56,26 @@ public class NewSlotBooking extends Fragment {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-
-                    if(dataSnapshot.getValue(Integer.class)==0 && db.isBeaconDetected("Beacon 1")){
-                        GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
-                        db.setCurrentSlot(null);
-                        gradient1.setColor(Color.GRAY);
+                if(dataSnapshot.getValue(Integer.class)==0){
+                    GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
+                    db.setCurrentSlot(null);
+                    gradient1.setColor(Color.GRAY);
+                    if(db.isBeaconDetected("Beacon 1")){
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
-                        bundle.putString("message", "Thanks for parking here!");
-                        resultFragment.setArguments(bundle);
-                        transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();
-                    }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 1")){
-                        GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
-                        db.setCurrentSlot("Slot 1");
-                        gradient1.setColor(Color.RED);
+                    }else{
+                        Log.i(GenericTag,"updated location of Slot 1 to vacant");
+                    }
+                }else if(dataSnapshot.getValue(Integer.class)==1){
+                    GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
+                    gradient1.setColor(Color.RED);
+                    db.setCurrentSlot("Slot 1");
+                    if(db.isBeaconDetected("Beacon 1")){
                         Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
                         result.setText("You have parked at Slot 1");
-                        /*bundle.putString("message", "You have parked at Slot 1");
-                        resultFragment.setArguments(bundle);
-                        transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();*/
+                    }else{
+                        Log.i(GenericTag,"updated location of Slot 1 to occupied");
                     }
+                }
             }
 
             @Override
@@ -95,27 +93,25 @@ public class NewSlotBooking extends Fragment {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-
-                    if(dataSnapshot.getValue(Integer.class)==0 && db.isBeaconDetected("Beacon 2")){
+                    if(dataSnapshot.getValue(Integer.class)==0){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         db.setCurrentSlot(null);
                         gradient1.setColor(Color.GRAY);
-                        Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
-                        bundle.putString("message", "Thanks for parking here!");
-                        resultFragment.setArguments(bundle);
-                        transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();
-                    }else if(dataSnapshot.getValue(Integer.class)==1 && db.isBeaconDetected("Beacon 2")){
+                        if(db.isBeaconDetected("Beacon 2")){
+                            Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Log.i(GenericTag,"updated location of Slot 2 to vacant");
+                        }
+                    }else if(dataSnapshot.getValue(Integer.class)==1){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         gradient1.setColor(Color.RED);
                         db.setCurrentSlot("Slot 2");
-                        Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
-                        result.setText("You have parked at Slot 2");
-                        /*bundle.putString("message", "You have parked at Slot 2");
-                        resultFragment.setArguments(bundle);
-                        transaction.replace(R.id.nav_host_fragment, resultFragment);
-                        transaction.commit();*/
+                        if(db.isBeaconDetected("Beacon 2")){
+                            Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
+                            result.setText("You have parked at Slot 2");
+                        }else{
+                            Log.i(GenericTag,"updated location of Slot 1 to occupied");
+                        }
                     }
             }
 

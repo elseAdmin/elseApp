@@ -16,7 +16,7 @@ public class NotificationsViewModel extends ViewModel {
             mText.setValue("No notifications as of now!");
         }else{
             mText = new MutableLiveData<>();
-            mText.setValue("Your vehicles captured location is : "+db.getCurrentSlot()+".");
+            mText.setValue("Your vehicle's captured location is : "+db.getCurrentSlot()+".");
         }
     }
 
