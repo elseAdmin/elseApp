@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 
 public class NewSlotBooking extends Fragment {
@@ -39,7 +40,7 @@ public class NewSlotBooking extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.i("Inside New Slot layout","Car SLots available");
+        Log.i(GenericTag,"Car Slots available");
         final View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
         db = new DatabaseHelper();
         final String androidId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -56,16 +57,16 @@ public class NewSlotBooking extends Fragment {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue(Integer.class)==0){
+                if(dataSnapshot.getValue(String.class).equals("0")){
                     GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                     db.setCurrentSlot(null);
-                    gradient1.setColor(Color.GRAY);
+                    gradient1.setColor(Color.LTGRAY);
                     if(db.isBeaconDetected("Beacon 1")){
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
                     }else{
                         Log.i(GenericTag,"updated location of Slot 1 to vacant");
                     }
-                }else if(dataSnapshot.getValue(Integer.class)==1){
+                }else  if(dataSnapshot.getValue(String.class).equals("1")){
                     GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                     gradient1.setColor(Color.RED);
                     db.setCurrentSlot("Slot 1");
@@ -93,16 +94,16 @@ public class NewSlotBooking extends Fragment {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getValue(Integer.class)==0){
+                    if(dataSnapshot.getValue(String.class).equals("0")){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         db.setCurrentSlot(null);
-                        gradient1.setColor(Color.GRAY);
+                        gradient1.setColor(Color.LTGRAY);
                         if(db.isBeaconDetected("Beacon 2")){
                             Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
                         }else{
                             Log.i(GenericTag,"updated location of Slot 2 to vacant");
                         }
-                    }else if(dataSnapshot.getValue(Integer.class)==1){
+                    }else  if(dataSnapshot.getValue(String.class).equals("1")){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
                         gradient1.setColor(Color.RED);
                         db.setCurrentSlot("Slot 2");

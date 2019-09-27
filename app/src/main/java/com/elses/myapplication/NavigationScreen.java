@@ -2,10 +2,10 @@ package com.elses.myapplication;
 
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 
 import com.elses.myapplication.ui.BeaconConnectivityActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;

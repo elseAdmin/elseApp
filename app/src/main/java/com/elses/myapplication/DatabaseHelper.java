@@ -43,4 +43,6 @@ public class DatabaseHelper {
     public void removeBeacon(String beaconName) {
       beacons.remove(beaconName);
     }
+
+    public Set<String> getAllBeacons(){ return beacons; }
 }

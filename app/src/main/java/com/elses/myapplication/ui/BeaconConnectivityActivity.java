@@ -3,11 +3,12 @@ package com.elses.myapplication.ui;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 
 import com.elses.myapplication.DatabaseHelper;
@@ -24,7 +25,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 
 
-public class BeaconConnectivityActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks,
+public class BeaconConnectivityActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
     private MessageListener mMessageListener;
     private OnFailureListener onFailureListener;
@@ -55,7 +56,8 @@ public class BeaconConnectivityActivity extends AppCompatActivity  implements Go
                 super.onBleSignalChanged(message, bleSignal);
                 //beaconRoot.child(new String(message.getContent())).push(androidId);
                 db.addBeacon(new String(message.getContent()));
-                Log.i(BeaconTag, "Signal fluctuation for Beacon: "+new String(message.getContent())+ " ,new RSSI: "+bleSignal.getRssi());
+                Log.i(BeaconTag, "Signal fluctuation for "+new String(message.getContent())+ " ,new RSSI: "+bleSignal.getRssi());
+                Log.i(BeaconTag, "Total beacons in range : "+db.getAllBeacons().toString());
             }
         };
 

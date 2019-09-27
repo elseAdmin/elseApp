@@ -1,13 +1,10 @@
 package com.elses.myapplication.ui.dashboard;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +13,10 @@ import android.widget.Toast;
 
 import com.elses.myapplication.NewSlotBooking;
 import com.elses.myapplication.R;
-import com.elses.myapplication.ResultFragment;
-import com.elses.myapplication.SlotBooking;
-import com.elses.myapplication.SplashScreen;
 import com.google.zxing.Result;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
