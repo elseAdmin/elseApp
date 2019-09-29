@@ -1,6 +1,8 @@
 package com.elses.myapplication.ui;
 
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 
+import com.elses.myapplication.BeaconMessageReceiver;
 import com.elses.myapplication.DatabaseHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -101,6 +104,7 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(GenericTag, "GoogleApiClient connected");
         subscribe();
+        backgroundSubscribe();
     }
 
     @Override
@@ -119,6 +123,21 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
 
         Nearby.getMessagesClient(this).subscribe(mMessageListener).addOnFailureListener(onFailureListener);
     }
+
+    // Subscribe to messages in the background.
+    private void backgroundSubscribe() {
+        Log.i(GenericTag, "Subscribing for background updates.");
+        SubscribeOptions options = new SubscribeOptions.Builder()
+                .setStrategy(Strategy.BLE_ONLY)
+                .build();
+        Nearby.getMessagesClient(this).subscribe(getPendingIntent(), options);
+    }
+
+    private PendingIntent getPendingIntent() {
+        return PendingIntent.getBroadcast(this, 0, new Intent(this, BeaconMessageReceiver.class),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
