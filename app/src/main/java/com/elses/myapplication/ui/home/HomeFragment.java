@@ -13,6 +13,7 @@ import com.elses.myapplication.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -52,9 +53,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 System.out.println("Refreshing fragment");
-                Fragment fragment = getFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 if(fragment instanceof HomeFragment){
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.detach(fragment);
                     transaction.attach(fragment);
                     transaction.commit();

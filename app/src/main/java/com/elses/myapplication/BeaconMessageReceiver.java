@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.BleSignal;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
@@ -24,6 +25,12 @@ public class BeaconMessageReceiver extends BroadcastReceiver {
             @Override
             public void onLost(Message message) {
                 Log.i(GenericTag, "Lost message via PendingIntent: " + message);
+            }
+
+            @Override
+            public void onBleSignalChanged(Message message, BleSignal bleSignal) {
+                super.onBleSignalChanged(message, bleSignal);
+                Log.i(GenericTag, "Signal fluctuation for "+new String(message.getContent())+ " ,new RSSI: "+bleSignal.getRssi());
             }
         });
     }

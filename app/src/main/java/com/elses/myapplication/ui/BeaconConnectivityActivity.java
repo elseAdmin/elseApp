@@ -104,7 +104,6 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(GenericTag, "GoogleApiClient connected");
         subscribe();
-        backgroundSubscribe();
     }
 
     @Override
@@ -122,20 +121,6 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
                 .build();
 
         Nearby.getMessagesClient(this).subscribe(mMessageListener).addOnFailureListener(onFailureListener);
-    }
-
-    // Subscribe to messages in the background.
-    private void backgroundSubscribe() {
-        Log.i(GenericTag, "Subscribing for background updates.");
-        SubscribeOptions options = new SubscribeOptions.Builder()
-                .setStrategy(Strategy.BLE_ONLY)
-                .build();
-        Nearby.getMessagesClient(this).subscribe(getPendingIntent(), options);
-    }
-
-    private PendingIntent getPendingIntent() {
-        return PendingIntent.getBroadcast(this, 0, new Intent(this, BeaconMessageReceiver.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Override
