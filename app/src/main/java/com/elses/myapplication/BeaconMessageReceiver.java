@@ -12,7 +12,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 public class BeaconMessageReceiver extends BroadcastReceiver {
 
-    private static final String GenericTag = "Background Activity";
+    private static final String GenericTag = "Background beacon scanning";
 
     @Override
     public void onReceive(Context context, Intent intent) {

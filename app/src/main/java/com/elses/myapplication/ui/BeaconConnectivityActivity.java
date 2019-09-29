@@ -37,6 +37,7 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
     private static final String GenericTag = "Base Activity";
     private static final String BeaconTag = "Beacon";
     private static final int PERMISSIONS_REQUEST_CODE = 1111;
+    private static final int BACKGROUND_PERMISSIONS_REQUEST_CODE = 911;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,21 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
         }
         Log.i(GenericTag, "GoogleApiClient services resumed");
     }
+
+    // Subscribe to messages in the background.
+    private void backgroundSubscribe() {
+        Log.i(GenericTag, "Subscribing for background updates.");
+        SubscribeOptions options = new SubscribeOptions.Builder()
+                .setStrategy(Strategy.BLE_ONLY)
+                .build();
+        Nearby.getMessagesClient(this).subscribe(getPendingIntent(), options);
+    }
+
+    private PendingIntent getPendingIntent() {
+        return PendingIntent.getBroadcast(this, BACKGROUND_PERMISSIONS_REQUEST_CODE, new Intent(this, BeaconMessageReceiver.class),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     private synchronized void buildGoogleApiClient () {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -104,6 +120,7 @@ public class BeaconConnectivityActivity extends AppCompatActivity implements Goo
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(GenericTag, "GoogleApiClient connected");
         subscribe();
+        backgroundSubscribe();
     }
 
     @Override
