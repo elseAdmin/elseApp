@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_parking"
-        android:name="com.elses.myapplication.ui.dashboard.ParkingFragment"
+        android:name="com.elses.myapplication.ui.parking.ParkingFragment"
         android:label="@string/title_parking"
         tools:layout="@layout/fragment_parking" />
 

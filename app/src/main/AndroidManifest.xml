@@ -24,7 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service
+            android:icon="@mipmap/ic_else_launcher"
+            android:name="com.elses.service.BeaconBackgroundScanService" />
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCUs29xP8tY5rsT4kjMmr7nvZfJDLa-pOw" />
@@ -32,6 +34,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <dist:module dist:instant="true" />
 

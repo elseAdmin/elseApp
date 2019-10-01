@@ -1,4 +1,4 @@
-package com.elses.myapplication.ui.dashboard;
+package com.elses.myapplication.ui.parking;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,10 +34,6 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                /*Intent intent = new Intent(getActivity(), SlotBooking.class);
-                startActivity(intent);
-                getActivity().finish();*/
-                System.out.println("Calling result fragment");
                 Fragment slotFragment = new NewSlotBooking();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment, slotFragment);
@@ -54,7 +50,6 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
                 requestPermissions();
             }
         }
-
         mScannerView = new ZXingScannerView(getActivity());
         return mScannerView;
     }

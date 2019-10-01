@@ -26,14 +26,13 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("Inside Home dashboard");
         dbHelper = new DatabaseHelper();
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         if(dbHelper.isBeaconDetected("Beacon 4")){
-            textView.setText("Welcome to unity Rohini!!!");
+            textView.setText("Welcome to Unity One Rohini!!");
         }
         else {
             homeViewModel.getText().observe(this, new Observer<String>() {
@@ -62,7 +61,7 @@ public class HomeFragment extends Fragment {
                 }
 
             }
-        },10000);
+        },1000);
     }
 
     @Override

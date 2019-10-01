@@ -1,5 +1,6 @@
 package com.elses.myapplication;
 
+import android.app.AppComponentFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.provider.Settings;
@@ -8,14 +9,15 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.elses.myapplication.ui.BeaconConnectivityActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class SlotBooking extends BeaconConnectivityActivity{
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SlotBooking extends AppCompatActivity {
     private EditText slot1,slot2;
     private DatabaseReference proxi1,proxi2;
     private static final String GenericTag = "Slot Booking";

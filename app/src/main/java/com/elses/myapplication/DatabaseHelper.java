@@ -22,6 +22,7 @@ public class DatabaseHelper {
         if(beacons==null)
         beacons = new HashSet<>();
     }
+    private static boolean inPremise ;
     private static Set<String> beacons;
     private static String currentSlot;
 

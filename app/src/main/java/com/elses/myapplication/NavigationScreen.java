@@ -1,18 +1,21 @@
 package com.elses.myapplication;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.elses.myapplication.ui.BeaconConnectivityActivity;
+import com.elses.service.BeaconBackgroundScanService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class NavigationScreen extends BeaconConnectivityActivity {
+public class NavigationScreen extends AppCompatActivity {
 
     private static final String GenericTag = "ElseApp";
     @Override
@@ -28,7 +31,10 @@ public class NavigationScreen extends BeaconConnectivityActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
+            startForegroundService(new Intent(this, BeaconBackgroundScanService.class));
+        }
         final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.i(GenericTag,"User identified by android id :"+androidId);
     }
