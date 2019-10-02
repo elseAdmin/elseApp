@@ -12,7 +12,7 @@ public class NotificationsViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     DatabaseHelper db = new DatabaseHelper();
     public NotificationsViewModel() {
-        if(db.getCurrentSlot()==null) {
+        if(db.getCurrentSlot().equals("")) {
             mText = new MutableLiveData<>();
             mText.setValue("No notifications as of now!");
         }else{

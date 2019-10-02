@@ -1,14 +1,11 @@
 package com.elses.myapplication;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-
 import com.elses.service.BeaconBackgroundScanService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 public class NavigationScreen extends AppCompatActivity {
 
     private static final String GenericTag = "ElseApp";
+    DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +32,10 @@ public class NavigationScreen extends AppCompatActivity {
 
         startForegroundService(new Intent(this, BeaconBackgroundScanService.class));
 
+        db = new DatabaseHelper();
         final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.i(GenericTag,"User identified by android id :"+androidId);
+        db.getDbRootRef().child(androidId).child("parkedAt");
+        db.setUserId(androidId);
+        Log.i(GenericTag,"Registered user with android id : "+androidId);
     }
 }

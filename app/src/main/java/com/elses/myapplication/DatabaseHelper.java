@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.google.android.gms.common.stats.LoggingConstants;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +24,23 @@ public class DatabaseHelper {
         if(beacons==null)
         beacons = new HashSet<>();
     }
-    private static boolean inPremise ;
+    private static DatabaseReference dbRootRef = FirebaseDatabase.getInstance().getReference();
     private static Set<String> beacons;
-    private static String currentSlot;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        DatabaseHelper.userId = userId;
+    }
+
+    private static String userId;
+    private static String currentSlot = "";
+
+    public DatabaseReference getDbRootRef() {
+        return dbRootRef;
+    }
 
     public String getCurrentSlot() {
         return currentSlot;

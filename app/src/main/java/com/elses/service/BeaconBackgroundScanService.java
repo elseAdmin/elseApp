@@ -66,7 +66,7 @@ public class BeaconBackgroundScanService extends Service implements GoogleApiCli
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
-                Log.i(BeaconTag, "Discovered beacon with name: " + new String(message.getContent()));
+                Log.i(BeaconTag, "Discovered " + new String(message.getContent()));
                 db.addBeacon(new String(message.getContent()));
             }
 
@@ -74,6 +74,7 @@ public class BeaconBackgroundScanService extends Service implements GoogleApiCli
             public void onLost(Message message) {
                 db.removeBeacon(new String(message.getContent()));
                 Log.i(BeaconTag, "User is now invisible to Beacon: " +new String(message.getContent()));
+                Log.i(BeaconTag, "Total beacons in range : "+db.getAllBeacons().toString());
             }
 
             @Override

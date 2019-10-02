@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +15,17 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 
 public class NewSlotBooking extends Fragment {
 
-    private EditText slot1,slot2;
+    private EditText slot1, slot2;
     private TextView result;
     private DatabaseReference proxi1,proxi2;
-    private static final String GenericTag = "Slot Booking";
+    private static final String GenericTag = "SlotBooking";
     DatabaseHelper db;
 
     @Override
@@ -47,40 +44,39 @@ public class NewSlotBooking extends Fragment {
         slot2 = root.findViewById(R.id.slot2);
         result = root.findViewById(R.id.text_result);
 
-        proxi1 = FirebaseDatabase.getInstance().getReference().child("CarSlot1");
-        proxi2 = FirebaseDatabase.getInstance().getReference().child("CarSlot2");
+        proxi1 = db.getDbRootRef().child("CarSlot1");
+        proxi2 = db.getDbRootRef().child("CarSlot2");
 
         ValueEventListener postListenerProxi1 = new ValueEventListener() {
-            Bundle bundle=new Bundle();
-            Fragment resultFragment = new ResultFragment();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue(String.class).equals("0")){
-                    GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
-                    db.setCurrentSlot(null);
+                    GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
                     gradient1.setColor(Color.LTGRAY);
-                    if(db.isBeaconDetected("Beacon 1")){
+                    if(db.isBeaconDetected("Beacon 1") && db.getCurrentSlot().equals("CarSlot1")){
+                        db.setCurrentSlot("");
+                        db.getDbRootRef().child(db.getUserId()).child("parkedAt").setValue("null");
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
+                        result.setText("");
                     }else{
-                        Log.i(GenericTag,"updated location of Slot 1 to vacant");
+                        Log.i(GenericTag,"Slot 1 status updated to occupied");
                     }
                 }else  if(dataSnapshot.getValue(String.class).equals("1")){
-                    GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
-                    gradient1.setColor(Color.RED);
-                    db.setCurrentSlot("Slot 1");
-                    if(db.isBeaconDetected("Beacon 1")){
-                        Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
-                        result.setText("You have parked at Slot 1");
+                    if(db.isBeaconDetected("Beacon 1") && db.getCurrentSlot().equals("")){
+                            db.setCurrentSlot("CarSlot1");
+                        GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
+                        gradient1.setColor(Color.RED);
+                            db.getDbRootRef().child(db.getUserId()).child("parkedAt").setValue("CarSlot1");
+                            Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
+                            result.setText("You have parked at Slot 1");
                     }else{
-                        Log.i(GenericTag,"updated location of Slot 1 to occupied");
+                        Log.i(GenericTag,"Slot 1 status updated to occupied");
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
                 Log.w(GenericTag, "Value change listener failed for slot 1, ", databaseError.toException());
             }
         };
@@ -88,40 +84,40 @@ public class NewSlotBooking extends Fragment {
 
 
         ValueEventListener postListenerProxi2 = new ValueEventListener() {
-            Bundle bundle=new Bundle();
-            Fragment resultFragment = new ResultFragment();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue(String.class).equals("0")){
                         GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
-                        db.setCurrentSlot(null);
                         gradient1.setColor(Color.LTGRAY);
-                        if(db.isBeaconDetected("Beacon 2")){
+                        if(db.isBeaconDetected("Beacon 2") && db.getCurrentSlot().equals("CarSlot2")){
+                            db.setCurrentSlot("");
+                            db.getDbRootRef().child(db.getUserId()).child("parkedAt").setValue("null");
                             Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
+                            result.setText("");
                         }else{
-                            Log.i(GenericTag,"updated location of Slot 2 to vacant");
+                            Log.i(GenericTag,"Slot 2 status updated to vacant");
                         }
                     }else  if(dataSnapshot.getValue(String.class).equals("1")){
-                        GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
-                        gradient1.setColor(Color.RED);
-                        db.setCurrentSlot("Slot 2");
-                        if(db.isBeaconDetected("Beacon 2")){
+                        if(db.isBeaconDetected("Beacon 2") && db.getCurrentSlot().equals("")){
+                            db.setCurrentSlot("CarSlot2");
+                            GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
+                            gradient1.setColor(Color.RED);
+                            db.getDbRootRef().child(db.getUserId()).child("parkedAt").setValue("CarSlot2");
                             Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
                             result.setText("You have parked at Slot 2");
                         }else{
-                            Log.i(GenericTag,"updated location of Slot 1 to occupied");
+                            Log.i(GenericTag,"Slot 1 status updated to vacant");
                         }
                     }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
                 Log.w(GenericTag, "Value change listener failed for slot 2, ", databaseError.toException());
             }
         };
         proxi2.addValueEventListener(postListenerProxi2);
+
         return root;
     }
 
