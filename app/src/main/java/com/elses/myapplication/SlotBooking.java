@@ -1,9 +1,7 @@
 package com.elses.myapplication;
 
-import android.app.AppComponentFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.provider.Settings;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -20,21 +18,20 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SlotBooking extends AppCompatActivity {
     private EditText slot1,slot2;
     private DatabaseReference proxi1,proxi2;
-    private static final String GenericTag = "Slot Booking";
+    private static final String GenericTag = "SlotBooking";
     DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        Log.i("Inside Slot layout","Car SLots available");
+        Log.i(GenericTag,"Loading parking ");
         setContentView(R.layout.activity_slot_booking);
         db = new DatabaseHelper();
-        final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         slot1 = findViewById(R.id.slot1);
         slot2 = findViewById(R.id.slot2);
 
-        proxi1 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot1");
-        proxi2 = FirebaseDatabase.getInstance().getReference().child("parking").child("CarSlot2");
+        proxi1 = FirebaseDatabase.getInstance().getReference().child("CarSlot1");
+        proxi2 = FirebaseDatabase.getInstance().getReference().child("CarSlot2");
 
         ValueEventListener postListenerProxi1 = new ValueEventListener() {
             int temp = -1;

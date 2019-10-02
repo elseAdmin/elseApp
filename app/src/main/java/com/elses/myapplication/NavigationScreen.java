@@ -31,10 +31,9 @@ public class NavigationScreen extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            startForegroundService(new Intent(this, BeaconBackgroundScanService.class));
-        }
+        startForegroundService(new Intent(this, BeaconBackgroundScanService.class));
+
         final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.i(GenericTag,"User identified by android id :"+androidId);
     }

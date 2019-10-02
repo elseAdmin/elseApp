@@ -43,7 +43,6 @@ public class NewSlotBooking extends Fragment {
         Log.i(GenericTag,"Car Slots available");
         final View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
         db = new DatabaseHelper();
-        final String androidId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         slot1 = root.findViewById(R.id.slot1);
         slot2 = root.findViewById(R.id.slot2);
         result = root.findViewById(R.id.text_result);
