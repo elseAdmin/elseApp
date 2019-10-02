@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.elses.myapplication.DatabaseHelper;
 import com.elses.myapplication.NewSlotBooking;
 import com.elses.myapplication.R;
 import com.google.zxing.Result;
@@ -25,11 +26,15 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
 
     private ZXingScannerView mScannerView;
     private static final int REQUEST_CAMERA = 1;
+    private DatabaseHelper db;
 
     @Override
     public void handleResult(Result rawResult) {
         Toast.makeText(getActivity(), "looking for available slots", Toast.LENGTH_SHORT).show();
         Log.i("Barcode", rawResult.getText());
+
+        db.setIsUserInPremise(true);
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -44,14 +49,17 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(!checkPermission()){
+        db = new DatabaseHelper();
+        if(!db.isIsUserInPremise()) {
+            if (!checkPermission()) {
                 requestPermissions();
             }
+            mScannerView = new ZXingScannerView(getActivity());
+            return mScannerView;
+        }else{
+            View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
+            return root;
         }
-        mScannerView = new ZXingScannerView(getActivity());
-        return mScannerView;
     }
 
     private void requestPermissions() {
@@ -65,16 +73,20 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
     @Override
     public void onResume() {
         super.onResume();
-        if(!checkPermission()){
-            requestPermissions();
+        if(!db.isIsUserInPremise()) {
+            if (!checkPermission()) {
+                requestPermissions();
+            }
+            mScannerView.setResultHandler(this);
+            mScannerView.startCamera();
         }
-        mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();
+        if(!db.isIsUserInPremise()) {
+            mScannerView.stopCamera();
+        }
     }
 }

@@ -34,7 +34,6 @@ public class NavigationScreen extends AppCompatActivity {
 
         db = new DatabaseHelper();
         final String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        db.getDbRootRef().child(androidId).child("parkedAt");
         db.setUserId(androidId);
         Log.i(GenericTag,"Registered user with android id : "+androidId);
     }

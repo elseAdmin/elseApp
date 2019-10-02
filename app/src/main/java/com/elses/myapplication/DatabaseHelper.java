@@ -20,12 +20,25 @@ import java.util.Set;
 
 
 public class DatabaseHelper {
+
     public DatabaseHelper() {
         if(beacons==null)
         beacons = new HashSet<>();
     }
+
     private static DatabaseReference dbRootRef = FirebaseDatabase.getInstance().getReference();
     private static Set<String> beacons;
+    private static String userId;
+    private static String currentSlot = "";
+    private static boolean isUserInPremise = false;
+
+    public boolean isIsUserInPremise() {
+        return isUserInPremise;
+    }
+
+    public void setIsUserInPremise(boolean isUserInPremise) {
+        DatabaseHelper.isUserInPremise = isUserInPremise;
+    }
 
     public String getUserId() {
         return userId;
@@ -34,9 +47,6 @@ public class DatabaseHelper {
     public void setUserId(String userId) {
         DatabaseHelper.userId = userId;
     }
-
-    private static String userId;
-    private static String currentSlot = "";
 
     public DatabaseReference getDbRootRef() {
         return dbRootRef;
