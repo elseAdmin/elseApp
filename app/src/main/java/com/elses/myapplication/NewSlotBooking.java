@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elses.myapplication.ui.home.HomeFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 
 public class NewSlotBooking extends Fragment {
@@ -117,11 +120,27 @@ public class NewSlotBooking extends Fragment {
             }
         };
         proxi2.addValueEventListener(postListenerProxi2);
-
+        refreshScreen();
         return root;
     }
 
+    private void refreshScreen(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(GenericTag,"Refreshing slot booking fragment");
+                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.slotBooking);
+                if(fragment instanceof NewSlotBooking){
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.detach(fragment);
+                    transaction.attach(fragment);
+                    transaction.commit();
+                }
 
+            }
+        },1000);
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

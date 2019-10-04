@@ -1,6 +1,5 @@
 package com.elses.myapplication.ui.parking;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.core.app.ActivityCompat;
@@ -57,6 +56,7 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
             mScannerView = new ZXingScannerView(getActivity());
             return mScannerView;
         }else{
+            //faulty
             View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
             return root;
         }
