@@ -62,17 +62,19 @@ public class NewSlotBooking extends Fragment {
                         Toast.makeText(getActivity(), "Thanks for parking here!", Toast.LENGTH_SHORT).show();
                         result.setText("");
                     }else{
-                        Log.i(GenericTag,"Slot 1 status updated to occupied");
+                        Log.i(GenericTag,"Slot 1 status updated to vacant");
                     }
                 }else  if(dataSnapshot.getValue(String.class).equals("1")){
                     if(db.isBeaconDetected("Beacon 1") && db.getCurrentSlot().equals("")){
                             db.setCurrentSlot("CarSlot1");
                         GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
-                        gradient1.setColor(Color.RED);
+                        gradient1.setColor(Color.GREEN);
                             db.getDbRootRef().child(db.getUserId()).child("parkedAt").setValue("CarSlot1");
                             Toast.makeText(getActivity(), "You have parked at Slot 1", Toast.LENGTH_SHORT).show();
                             result.setText("You have parked at Slot 1");
                     }else{
+                        GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
+                        gradient1.setColor(Color.RED);
                         Log.i(GenericTag,"Slot 1 status updated to occupied");
                     }
                 }
@@ -104,12 +106,14 @@ public class NewSlotBooking extends Fragment {
                         if(db.isBeaconDetected("Beacon 2") && db.getCurrentSlot().equals("")){
                             db.setCurrentSlot("CarSlot2");
                             GradientDrawable gradient1 = (GradientDrawable) slot2.getBackground().mutate();
-                            gradient1.setColor(Color.RED);
+                            gradient1.setColor(Color.GREEN);
                             db.getDbRootRef().child(db.getUserId()).child("parkedAt").setValue("CarSlot2");
                             Toast.makeText(getActivity(), "You have parked at Slot 2", Toast.LENGTH_SHORT).show();
                             result.setText("You have parked at Slot 2");
                         }else{
-                            Log.i(GenericTag,"Slot 1 status updated to vacant");
+                            GradientDrawable gradient1 = (GradientDrawable) slot1.getBackground().mutate();
+                            gradient1.setColor(Color.RED);
+                            Log.i(GenericTag,"Slot 2 status updated to occupied");
                         }
                     }
             }
@@ -130,7 +134,7 @@ public class NewSlotBooking extends Fragment {
             @Override
             public void run() {
                 Log.i(GenericTag,"Refreshing slot booking fragment");
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.slotBooking);
+                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("NewSlotBooking");
                 if(fragment instanceof NewSlotBooking){
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.detach(fragment);

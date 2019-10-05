@@ -22,4 +22,10 @@
         android:name="com.elses.myapplication.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/suhail"
+        android:name="com.elses.myapplication.NewSlotBooking"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_new_slot_booking" />
 </navigation>

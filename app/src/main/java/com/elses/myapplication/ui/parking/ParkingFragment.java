@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.elses.myapplication.DatabaseHelper;
 import com.elses.myapplication.NewSlotBooking;
 import com.elses.myapplication.R;
+import com.elses.myapplication.ui.home.HomeFragment;
 import com.google.zxing.Result;
 
 import androidx.fragment.app.Fragment;
@@ -41,6 +42,7 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
                 Fragment slotFragment = new NewSlotBooking();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment, slotFragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         }, 100);
@@ -49,7 +51,7 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         db = new DatabaseHelper();
-        if(!db.isIsUserInPremise()) {
+       if(!db.isIsUserInPremise()) {
             if (!checkPermission()) {
                 requestPermissions();
             }
@@ -58,6 +60,13 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
         }else{
             //faulty
             View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
+           Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("NewSlotBooking");
+           if(fragment instanceof NewSlotBooking){
+               FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+               transaction.detach(fragment);
+               transaction.attach(fragment);
+               transaction.commit();
+           }
             return root;
         }
     }
