@@ -31,6 +31,15 @@ public class DatabaseHelper {
     private static String userId;
     private static String currentSlot = "";
     private static boolean isUserInPremise = false;
+    private static String currentFragment = "";
+
+    public String getCurrentFragment() {
+        return currentFragment;
+    }
+
+    public void setCurrentFragment(String currentFragment) {
+        DatabaseHelper.currentFragment = currentFragment;
+    }
 
     public boolean isIsUserInPremise() {
         return isUserInPremise;

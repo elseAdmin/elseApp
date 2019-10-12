@@ -2,6 +2,7 @@ package com.elses.myapplication.ui.home;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
+        dbHelper.setCurrentFragment("Home");
         if(dbHelper.isBeaconDetected("Beacon 4")){
             textView.setText("Welcome to Unity One Rohini!!");
         }
@@ -42,6 +44,7 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
+        Log.i("Barcode", "Current fragment :::: "+dbHelper.getCurrentFragment());
         refreshScreen();
         return root;
     }

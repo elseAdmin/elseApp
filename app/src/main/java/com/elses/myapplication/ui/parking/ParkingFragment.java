@@ -14,10 +14,14 @@ import com.elses.myapplication.DatabaseHelper;
 import com.elses.myapplication.NewSlotBooking;
 import com.elses.myapplication.R;
 import com.elses.myapplication.ui.home.HomeFragment;
+import com.elses.myapplication.ui.notifications.NotificationsFragment;
 import com.google.zxing.Result;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.util.List;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
@@ -40,7 +44,7 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
             @Override
             public void run() {
                 Fragment slotFragment = new NewSlotBooking();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment, slotFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -51,23 +55,50 @@ public class ParkingFragment extends Fragment implements ZXingScannerView.Result
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         db = new DatabaseHelper();
-       if(!db.isIsUserInPremise()) {
-            if (!checkPermission()) {
-                requestPermissions();
+
+        db.setCurrentFragment("Parking");
+        if (!checkPermission()) {
+            requestPermissions();
+        }
+        mScannerView = new ZXingScannerView(getActivity());
+        return mScannerView;
+
+//        if(!db.isIsUserInPremise()) {
+//        }else{
+//            //faulty
+//
+//            View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
+//
+//           /*Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("NewSlotBooking");
+//           if(fragment instanceof NewSlotBooking){
+//               FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//               transaction.detach(fragment);
+//               transaction.attach(fragment);
+//               transaction.commit();
+//           }*/
+//            return root;
+//        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("Barcode", "On Start method called");
+
+        Log.i("Barcode", "Current fragment :::: "+db.getCurrentFragment());
+        if(db.isIsUserInPremise()) {
+            // Fetch current Fragment and display
+            List<Fragment> fragmentList = getActivity().getSupportFragmentManager().getFragments();
+            for (Fragment fragment : fragmentList){
+                if(fragment.isVisible() && db.getCurrentFragment().equals("Parking")){
+                    Log.i("Barcode","Parking -----------------------"+fragment.toString());
+                    Fragment slotFragment = new NewSlotBooking();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(fragment.getId(), slotFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
-            mScannerView = new ZXingScannerView(getActivity());
-            return mScannerView;
-        }else{
-            //faulty
-            View root = inflater.inflate(R.layout.fragment_new_slot_booking, container, false);
-           Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("NewSlotBooking");
-           if(fragment instanceof NewSlotBooking){
-               FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-               transaction.detach(fragment);
-               transaction.attach(fragment);
-               transaction.commit();
-           }
-            return root;
         }
     }
 

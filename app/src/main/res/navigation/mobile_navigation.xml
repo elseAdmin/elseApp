@@ -24,8 +24,8 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/suhail"
+        android:id="@+id/navigation_new_slot_booking"
         android:name="com.elses.myapplication.NewSlotBooking"
-        android:label="@string/title_notifications"
+        android:label="@string/title_slot_booking"
         tools:layout="@layout/fragment_new_slot_booking" />
 </navigation>

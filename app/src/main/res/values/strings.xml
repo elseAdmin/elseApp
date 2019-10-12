@@ -5,6 +5,7 @@
     <string name="title_home">Home</string>
     <string name="title_parking">Parking</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_slot_booking">Slot Booking</string>
     <string name="select_camera">Select a Camera</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>

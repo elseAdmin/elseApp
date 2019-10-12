@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.elses.myapplication.DatabaseHelper;
 import com.elses.myapplication.R;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,8 @@ public class NotificationsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        DatabaseHelper db = new DatabaseHelper();
+        db.setCurrentFragment("Notification");
         notificationsViewModel =
                 ViewModelProviders.of(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
@@ -34,6 +37,7 @@ public class NotificationsFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        Log.i("Barcode", "Current fragment :::: "+db.getCurrentFragment());
         refreshScreen();
         return root;
     }
